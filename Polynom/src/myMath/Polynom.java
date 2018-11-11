@@ -171,7 +171,7 @@ public class Polynom implements Polynom_able
 			{
 				Monom monom = (Monom) m1.next();
 				Monom monom2 = (Monom) m2.next();
-				if (!monom.isEqual(monom2))
+				if (!monom.equals(monom2))
 				{
 					return false;
 				}

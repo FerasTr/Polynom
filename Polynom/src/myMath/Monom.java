@@ -73,13 +73,13 @@ public class Monom implements function
 			}
 			else
 			{
-				throw new RuntimeException("Wrong parameter for the Constractor"); // Throw an exception if the input in not valid.
+				throw new RuntimeException("Wrong parameter for the Constructor"); // Throw an exception if the input in not valid.
 			}
 
 		}
 		else
 		{
-			throw new RuntimeException("Wrong parameter for the Constractor"); // Throw an exception if the input in not valid.
+			throw new RuntimeException("Wrong parameter for the Constructor"); // Throw an exception if the input in not valid.
 		}
 	}
 
@@ -183,14 +183,22 @@ public class Monom implements function
 	 * 
 	 * @param m Monom to compare
 	 * @return true if equal, false otherwise. */
-	public boolean isEqual(Monom m)
+	@Override
+	public boolean equals(Object m)
 	{
 		if (m != null)
 		{
-			if (m.get_power() == this.get_power() && m.get_coefficient() == this.get_coefficient()) // Checks coefficient and power.
+			if (!(m instanceof Monom))
 			{
-				return true;
+				if (((Monom) m).get_power() == this.get_power() && ((Monom) m).get_coefficient() == this.get_coefficient()) // Checks coefficient and power.
+				{
+					return true;
+				}
 			}
+			else {
+				throw new RuntimeException( m + " is not a Monom"); // if not Monom then throw an exception.
+			}
+			
 		}
 		else
 		{
