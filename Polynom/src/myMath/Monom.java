@@ -69,6 +69,7 @@ public class Monom implements function
 				{
 					this.set_coefficient(0);
 				}
+
 				this.set_power(0);
 			}
 			else
@@ -90,7 +91,13 @@ public class Monom implements function
 	{
 		if (this.get_power() == m.get_power()) // Check is they both have the same power.
 		{
-			this.set_coefficient(this._coefficient + m._coefficient);
+			double coeff = this._coefficient + m._coefficient;
+			this.set_coefficient(coeff);
+			if (coeff == 0)
+			{
+				this.set_power(0);
+			}
+
 		}
 		else
 		{
@@ -103,9 +110,15 @@ public class Monom implements function
 	 * @param m monom to subtract. */
 	public void sub(Monom m)
 	{
-		if (this.get_power() == m.get_power())
+		if (this.get_power() == m.get_power()) // Check is they both have the same power.
 		{
-			this.set_coefficient(this._coefficient - m._coefficient); // Check is they both have the same power.
+			double coeff = this._coefficient - m._coefficient;
+			this.set_coefficient(coeff);
+			if (coeff == 0)
+			{
+				this.set_power(0);
+			}
+
 		}
 		else
 		{
@@ -118,8 +131,16 @@ public class Monom implements function
 	 * @param m monom to multiply */
 	public void multiply(Monom m)
 	{
-		this.set_coefficient(m._coefficient * this._coefficient); // Change current monom's coefficient.
-		this.set_power(m._power + this._power); // Change current monom's power.
+		if (m.get_coefficient() == 0)
+		{
+			this.set_coefficient(0); // Change current monom's coefficient.
+			this.set_power(0); // Change current monom's power.
+		}
+		else
+		{
+			this.set_coefficient(m._coefficient * this._coefficient); // Change current monom's coefficient.
+			this.set_power(m._power + this._power); // Change current monom's power.
+		}
 	}
 
 	/** This function calculates the derivative of current monom.
@@ -188,23 +209,27 @@ public class Monom implements function
 	{
 		if (m != null)
 		{
-			if (!(m instanceof Monom))
+			if ((m instanceof Monom))
 			{
 				if (((Monom) m).get_power() == this.get_power() && ((Monom) m).get_coefficient() == this.get_coefficient()) // Checks coefficient and power.
 				{
 					return true;
 				}
+				else
+				{
+					return false;
+				}
 			}
-			else {
-				throw new RuntimeException( m + " is not a Monom"); // if not Monom then throw an exception.
+			else
+			{
+				throw new RuntimeException("m is not a Monom"); // if not Monom then throw an exception.
 			}
-			
+
 		}
 		else
 		{
-			throw new RuntimeException("Monom m is NULL"); // if null then throw an exception.
+			throw new RuntimeException("m is NULL"); // if null then throw an exception.
 		}
-		return false;
 	}
 
 	// *********** Private Methods and Data ************
@@ -216,7 +241,14 @@ public class Monom implements function
 	{
 		if (!(p < 0))
 		{
-			this._power = p; // set power to p if and only if p is a positive integer.
+			if (this._coefficient == 0)
+			{
+				this._power = 0; // set power to 0 if coefficient is 0.
+			}
+			else
+			{
+				this._power = p; // set power to p if and only if p is a positive integer.
+			}
 		}
 		else
 		{
