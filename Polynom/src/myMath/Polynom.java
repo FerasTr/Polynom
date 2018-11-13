@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.function.Predicate;
 
 import myMath.Monom;
+import myMath.PolynomGraph;
 
 /** This class represents a Polynom with add, multiply functionality, it also should support the following:
  * 1. Riemann's Integral: https://en.wikipedia.org/wiki/Riemann_integral
@@ -157,9 +158,21 @@ public class Polynom implements Polynom_able
 		return sum; // return the sum.
 	}
 
+	/** This function is used to override the Object equals. */
+	@Override
+	public boolean equals(Object p)
+	{
+		if ((p instanceof Polynom))
+		{
+			return this.equals((Polynom) p);
+		}
+		return false;
+	}
+
 	/** This function checks if polynom p1 is equal to current polynom for every x.
 	 * 
 	 * @return true if equal, false otherwise. */
+
 	@Override
 	public boolean equals(Polynom_able p1)
 	{
@@ -199,39 +212,83 @@ public class Polynom implements Polynom_able
 	@Override
 	public Polynom_able derivative()
 	{
-		Polynom p = new Polynom(this); // New polynom to store result.
-		Iterator<Monom> itr = p.iteretor();
+		Polynom p = new Polynom(); // New polynom to store result.
+		Iterator<Monom> itr = this.iteretor();
 		while (itr.hasNext())
 		{
 			Monom monom = (Monom) itr.next();
-			monom.derivative();
-			if (!monom.isValid()) // Check if the derivative is valid, if not then remove it.
+			Monom monom2 = new Monom(monom.derivative());
+			if (monom2.isValid()) // Check if the derivative is valid, if not then remove it.
 			{
-				itr.remove();
+				p.add(monom2);
 			}
 		}
 		return p;
 	}
 
-	/** This function calculates the estimated area between x0 and x1 above the X-axis using the Midpoint Riemann Sum.
+	/** This function calculates the AREA between x0 and x1 using Rieman Midpoint Sum.
+	 * It uses two helper functions, one for the area above the X-Axis and one for the area under.
 	 * 
-	 * @return aproxmArea */
+	 * @return aproxmimated Area */
 	@Override
 	public double area(double x0, double x1, double eps)
 	{
-		double aproxmArea = 0; // Sum of each rectangle.
-		double numOfRec =Math.abs( (x1 - x0) / eps); // Number of rectangles calculated using eps.
+		if (x0 > x1)
+		{
+			throw new RuntimeException("ERROR: Wrong values (x0 shoudl be less than x1");
+		}
+		double areaAbove = areaPositive(x0, x1, eps);
+		double areaUnder = areaNegative(x0, x1, eps);
+		return areaAbove + areaUnder;
+	}
+
+	/** Helper function that calculates the area under the X-Axis.
+	 * 
+	 * @param x0
+	 * @param x1
+	 * @param eps
+	 * @return aproxm area under X. */
+
+	public double areaNegative(double x0, double x1, double eps)
+	{
+		double aproxmAreaUnder = 0; // Sum of each rectangle.
+		double numOfRec = Math.abs((x1 - x0) / eps); // Number of rectangles calculated using eps.
 		double epsM = eps / 2;
 		for (int i = 1; i <= numOfRec; i++)
 		{
 			double Area = eps * this.f(x0 + epsM);
-			if (Area > 0) // Only sum rectangles above the X-axis.
+			if (Area <= 0)
 			{
-				aproxmArea += Area;
+				aproxmAreaUnder += Area;
 			}
+
 			epsM += eps;
 		}
-		return aproxmArea;
+		return -aproxmAreaUnder;
+	}
+
+	/** Helper function that calculates the area above the X-Axis.
+	 * 
+	 * @param x0
+	 * @param x1
+	 * @param eps
+	 * @return aproxm area above X. */
+	public double areaPositive(double x0, double x1, double eps)
+	{
+		double aproxmAreaAbove = 0; // Sum of each rectangle.
+		double numOfRec = Math.abs((x1 - x0) / eps); // Number of rectangles calculated using eps.
+		double epsM = eps / 2;
+		for (int i = 1; i <= numOfRec; i++)
+		{
+			double Area = eps * this.f(x0 + epsM);
+			if (Area >= 0)
+			{
+				aproxmAreaAbove += Area;
+			}
+
+			epsM += eps;
+		}
+		return aproxmAreaAbove;
 	}
 
 	/** This function finds the root of the function with eps as tolerance of error.
@@ -274,6 +331,59 @@ public class Polynom implements Polynom_able
 			lengthF = Math.abs(f0 - f1);
 		}
 		return x1;
+	}
+
+	public ArrayList<Double> extremeMinMax(double x0, double x1, double eps)
+	{
+		Polynom derivative = (Polynom) this.derivative();
+		double current = x0;
+		ArrayList<Double> points = new ArrayList<>();
+		if (x0 > x1)
+		{
+			throw new RuntimeException("ERROR: Wrong values for x0 and x1");
+		}
+		while (current <= x1)
+		{
+			double check = derivative.f(current - eps) * derivative.f(current + eps);
+			if (check < 0 || derivative.f(current) == 0)
+			{
+				if (!(points.contains((current - eps))))
+				{
+					points.add(current);
+				}
+
+			}
+			current += eps;
+		}
+		return points;
+	}
+
+	public void display(double x0, double x1)
+	{
+		this.display(x0, x1, 0.25);
+	}
+
+	/** This function plots the graph for the calling polynom.
+	 * 
+	 * @param x0  Start point.
+	 * @param x1  End point.
+	 * @param eps Tolerance of error. */
+	public void display(double x0, double x1, double eps)
+	{
+		PolynomGraph pGraph = null;
+
+		try
+		{
+			pGraph = new PolynomGraph(this, x0, x1, eps);
+		}
+		catch (Exception e)
+		{
+			System.out.println(e);
+		}
+		System.out.println("Area under the x-Axis: " + this.areaNegative(x0, x1, eps));
+		System.out.println("Area above the x-Axis: " + this.areaPositive(x0, x1, eps));
+		System.out.println("Sum of the two areas: " + this.area(x0, x1, eps));
+		pGraph.setVisible(true);
 	}
 
 	/** This function builds a reusable string from current polynom.

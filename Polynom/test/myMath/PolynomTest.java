@@ -2,6 +2,8 @@ package myMath;
 
 import static org.junit.Assert.*;
 
+import java.util.Random;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -10,7 +12,16 @@ import org.junit.Test;
 
 public class PolynomTest
 {
-
+	private Polynom positiveP;
+	private Polynom negativeP;
+	private Polynom positiveP_2;
+	private Polynom negativeP_2;
+	private Polynom zeroPolynom;
+	private Polynom copyPP;
+	private Polynom copyNP;
+	private Polynom expectedResult;
+	private Polynom temp;
+	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception
 	{
@@ -19,124 +30,131 @@ public class PolynomTest
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception
 	{
+	
 	}
 
 	@Before
 	public void setUp() throws Exception
 	{
+		positiveP = new Polynom("5.6*x^3+35*x^2+5*x^0");
+		negativeP = new Polynom("-5.6*x^3-35*x^2-5*x^0");
+		positiveP_2 = new Polynom("36.5*x^4+2.3*x^3-1*x^2");
+		negativeP_2 = new Polynom("-8.3145*x^4-2.3*x^3+2*x^2");
+		zeroPolynom = new Polynom("0");
+		copyPP = new Polynom(positiveP);
+		copyNP = new Polynom(negativeP_2);
 	}
 
 	@After
 	public void tearDown() throws Exception
 	{
+		expectedResult = null;
+		temp = null;
 	}
 
 	@Test
-	public void testPolynom()
+	public void test_init_empty()
 	{
-		fail("Not yet implemented");
+		temp = new Polynom();
+		assertNotNull(temp); // Should be 0.
 	}
 
 	@Test
-	public void testPolynomString()
+	public void test_init_string()
 	{
-		fail("Not yet implemented");
+		
 	}
 
 	@Test
-	public void testPolynomPolynom_able()
+	public void test_init_copy()
 	{
-		fail("Not yet implemented");
+		
+		assertEquals(copyNP, negativeP_2);
+	}
+
+	/*	
+	@Test
+	public void test_fun_add_toPolynom()
+	{
+
 	}
 
 	@Test
-	public void testAddPolynom_able()
+	public void test_fun_sub_toPolynom()
 	{
-		fail("Not yet implemented");
+
 	}
 
 	@Test
-	public void testSubstract()
+	public void test_fun_multiply_byPolynom()
 	{
-		fail("Not yet implemented");
+
 	}
 
 	@Test
-	public void testMultiplyPolynom_able()
+	public void test_fun_multiply_byMonom()
 	{
-		fail("Not yet implemented");
+
 	}
 
 	@Test
-	public void testMultiplyMonom()
+	public void test_fun_f()
 	{
-		fail("Not yet implemented");
+
 	}
 
 	@Test
-	public void testF()
+	public void test_util_isZero()
 	{
-		fail("Not yet implemented");
+
 	}
 
 	@Test
-	public void testEqualsPolynom_able()
+	public void test_fun_derivative()
 	{
-		fail("Not yet implemented");
+
 	}
 
 	@Test
-	public void testIsZero()
+	public void test_fun_area()
 	{
-		fail("Not yet implemented");
+
 	}
 
 	@Test
-	public void testDerivative()
+	public void test_fun_root()
 	{
-		fail("Not yet implemented");
+
 	}
 
 	@Test
-	public void testArea()
+	public void test_util_toString()
 	{
-		fail("Not yet implemented");
+
 	}
 
 	@Test
-	public void testRoot()
+	public void test_util_size()
 	{
-		fail("Not yet implemented");
+
 	}
 
 	@Test
-	public void testToString()
+	public void test_fun_add_toMonom()
 	{
-		fail("Not yet implemented");
+
 	}
 
 	@Test
-	public void testSize()
+	public void test_fun_sub_toMonom()
 	{
-		fail("Not yet implemented");
+
 	}
 
 	@Test
-	public void testAddMonom()
+	public void test_util_copyNew()
 	{
-		fail("Not yet implemented");
-	}
 
-	@Test
-	public void testSub()
-	{
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testCopy()
-	{
-		fail("Not yet implemented");
-	}
+	}*/
 
 }

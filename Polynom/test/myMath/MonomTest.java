@@ -158,7 +158,7 @@ public class MonomTest
 	}
 
 	@Test
-	public void testToString()
+	public void test_util_toString()
 	{
 		String[] expectedString = { "5.6*x^2", "-5.6*x^2", "13.303*x^3", "-8.3145*x^4", "0.0*x^0" };
 		String[] actualString = { positiveM.toString(), negativeM.toString(), positiveM_2.toString(), negativeM_2.toString(), zeroMonom.toString() };
@@ -169,7 +169,7 @@ public class MonomTest
 	}
 
 	@Test(expected = RuntimeException.class)
-	public void testIsValid()
+	public void test_util_isValid()
 	{
 		double randomCoeff = -100 + (200) * r.nextDouble();
 		int wrongRandomPow = (int) (-2000 + (1999) * r.nextDouble());
