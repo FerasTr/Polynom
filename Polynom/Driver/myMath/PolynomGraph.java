@@ -46,12 +46,7 @@ public class PolynomGraph extends JFrame
 		this.end = x1;
 		this.eps = eps;
 		extreme = this.p.extremeMinMax(x0, x1, eps);
-
-		if (extreme.isEmpty())
-		{
-			throw new RuntimeException("No extreme for this function points.");
-		}
-
+		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(1280, 1000);
 
@@ -92,6 +87,12 @@ public class PolynomGraph extends JFrame
 	public static void main(String[] args)
 	{
 		Polynom p = new Polynom("0.2*x^4-1.5*x^3+3.0*x^2-1*x^1-5");
-		p.display(-2, 6);
+		// p.display(-2, 6, 0.25);
+
+		p = new Polynom("0.2*x^2 - 2*x^1 + 2");
+		//p.display(-4, 14, 0.25);
+		
+		p = new Polynom("1*x^1");
+		p.display(-30, 30, 0.25);
 	}
 }

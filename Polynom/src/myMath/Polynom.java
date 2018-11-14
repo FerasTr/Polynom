@@ -4,7 +4,6 @@ package myMath;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.function.Predicate;
 
 import myMath.Monom;
 import myMath.PolynomGraph;
@@ -100,7 +99,7 @@ public class Polynom implements Polynom_able
 		while (itr.hasNext())
 		{
 			Monom monom = (Monom) itr.next(); // Iterate over p1 and subtract each monom from this polynom.
-			this.sub(monom);
+			this.substract(monom);
 		}
 	}
 
@@ -120,6 +119,10 @@ public class Polynom implements Polynom_able
 				p.add(temp); // Add and sort
 			}
 			this.polyn = p.polyn; // Move the result to current polynom.
+		}
+		else
+		{
+			this.polyn.clear();
 		}
 
 	}
@@ -372,7 +375,7 @@ public class Polynom implements Polynom_able
 		}
 		System.out.println("Area under the x-Axis: " + this.areaUnderAbove(x0, x1, eps, false));
 		System.out.println("Area above the x-Axis: " + this.areaUnderAbove(x0, x1, eps, true));
-		System.out.println("Sum of the two areas: " + this.area(x0, x1, eps));
+		System.out.println("Sum of the two areas: " + this.area(x0, x1, eps) + '\n');
 		pGraph.setVisible(true);
 	}
 
@@ -454,7 +457,7 @@ public class Polynom implements Polynom_able
 	/** Subtracts monom m1 from current polynom
 	 * 
 	 * @param m1 Monom to subtract. */
-	public void sub(Monom m1)
+	public void substract(Monom m1)
 	{
 		boolean subbed = false;
 		Iterator<Monom> it = this.iteretor();
@@ -487,6 +490,19 @@ public class Polynom implements Polynom_able
 	{
 		Polynom p = new Polynom(this); // Perform a deep copy.
 		return p;
+	}
+
+	public Monom getMonom(int i)
+	{
+		if (this.size() == 0)
+		{
+			throw new RuntimeException("ERROR: This polynom is empty");
+		}
+		if (i < 0 || i >= this.size())
+		{
+			throw new RuntimeException("ERROR: Wrong index, please choose a value between (or equals) 0 and " + (this.size() - 1));
+		}
+		return new Monom(this.polyn.get(i));
 	}
 
 	/** @return Iterator of current polynom's list. */
