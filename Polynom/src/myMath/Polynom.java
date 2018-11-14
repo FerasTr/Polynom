@@ -227,7 +227,7 @@ public class Polynom implements Polynom_able
 	}
 
 	/** This function calculates the AREA between x0 and x1 using Rieman Midpoint Sum.
-	 * It uses two helper functions, one for the area above the X-Axis and one for the area under.
+	 * It uses one helper function to calculate area above and under the X-Axis.
 	 * 
 	 * @return aproxmimated Area */
 	@Override
@@ -235,36 +235,11 @@ public class Polynom implements Polynom_able
 	{
 		if (x0 > x1)
 		{
-			throw new RuntimeException("ERROR: Wrong values (x0 shoudl be less than x1");
+			throw new RuntimeException("ERROR: Wrong values (x0 should be less than x1");
 		}
-		double areaAbove = areaPositive(x0, x1, eps);
-		double areaUnder = areaNegative(x0, x1, eps);
+		double areaAbove = areaUnderAbove(x0, x1, eps, true);
+		double areaUnder = areaUnderAbove(x0, x1, eps, false);
 		return areaAbove + areaUnder;
-	}
-
-	/** Helper function that calculates the area under the X-Axis.
-	 * 
-	 * @param x0
-	 * @param x1
-	 * @param eps
-	 * @return aproxm area under X. */
-
-	public double areaNegative(double x0, double x1, double eps)
-	{
-		double aproxmAreaUnder = 0; // Sum of each rectangle.
-		double numOfRec = Math.abs((x1 - x0) / eps); // Number of rectangles calculated using eps.
-		double epsM = eps / 2;
-		for (int i = 1; i <= numOfRec; i++)
-		{
-			double Area = eps * this.f(x0 + epsM);
-			if (Area <= 0)
-			{
-				aproxmAreaUnder += Area;
-			}
-
-			epsM += eps;
-		}
-		return -aproxmAreaUnder;
 	}
 
 	/** Helper function that calculates the area above the X-Axis.
@@ -273,9 +248,13 @@ public class Polynom implements Polynom_able
 	 * @param x1
 	 * @param eps
 	 * @return aproxm area above X. */
-	public double areaPositive(double x0, double x1, double eps)
+	public double areaUnderAbove(double x0, double x1, double eps, boolean sign)
 	{
-		double aproxmAreaAbove = 0; // Sum of each rectangle.
+		// false = negative area, true = positive area.
+		// Sum of each rectangle.
+		double aproxmAreaAbove = 0;
+		double aproxmAreaUnder = 0;
+
 		double numOfRec = Math.abs((x1 - x0) / eps); // Number of rectangles calculated using eps.
 		double epsM = eps / 2;
 		for (int i = 1; i <= numOfRec; i++)
@@ -285,10 +264,21 @@ public class Polynom implements Polynom_able
 			{
 				aproxmAreaAbove += Area;
 			}
+			else
+			{
+				aproxmAreaUnder += Area;
+			}
 
 			epsM += eps;
 		}
-		return aproxmAreaAbove;
+		if (sign)
+		{
+			return aproxmAreaAbove;
+		}
+		else
+		{
+			return -aproxmAreaUnder;
+		}
 	}
 
 	/** This function finds the root of the function with eps as tolerance of error.
@@ -380,8 +370,8 @@ public class Polynom implements Polynom_able
 		{
 			System.out.println(e);
 		}
-		System.out.println("Area under the x-Axis: " + this.areaNegative(x0, x1, eps));
-		System.out.println("Area above the x-Axis: " + this.areaPositive(x0, x1, eps));
+		System.out.println("Area under the x-Axis: " + this.areaUnderAbove(x0, x1, eps, false));
+		System.out.println("Area above the x-Axis: " + this.areaUnderAbove(x0, x1, eps, true));
 		System.out.println("Sum of the two areas: " + this.area(x0, x1, eps));
 		pGraph.setVisible(true);
 	}
