@@ -11,6 +11,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+/**
+ * This class is for debugging polynom class.
+ * @author darag
+ */
 public class MonomTest
 {
 	private Monom positiveM;
@@ -65,6 +69,7 @@ public class MonomTest
 		assertEquals(copyPM, positiveM);
 	}
 
+	// TODO handle this test
 	@Test(expected = RuntimeException.class)
 	public void test_init_string()
 	{

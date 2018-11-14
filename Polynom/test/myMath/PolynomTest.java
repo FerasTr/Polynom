@@ -9,7 +9,10 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
+/**
+ * This class is for debugging polynom class.
+ * @author darag
+ */
 public class PolynomTest
 {
 	private Polynom positiveP;
