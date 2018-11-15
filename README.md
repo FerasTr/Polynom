@@ -1,4 +1,4 @@
-*Polynom*
+****Polynom****
 
 In this project you will find basic polynomial calculator.
 
